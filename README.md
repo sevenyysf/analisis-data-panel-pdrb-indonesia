@@ -1,109 +1,71 @@
-# Analisis Data Panel: Faktor-Faktor yang Berkaitan dengan PDRB Provinsi di Indonesia
+# Analisis Regresi Data Panel pada Faktor-Faktor yang Berkaitan dengan PDRB di 10 Provinsi Indonesia Tahun 2021--2024
 
-Repository ini berisi dokumentasi, dataset, dan kode analisis untuk
-proyek akhir mata kuliah **Ekonometrika**. Penelitian menggunakan
-regresi data panel untuk menganalisis hubungan Pendapatan Asli Daerah
-(PAD), Tingkat Partisipasi Angkatan Kerja (TPAK), Rata-Rata Lama Sekolah
-(RLS), dan kualitas infrastruktur jalan dengan PDRB ADHK 2010 pada
-sejumlah provinsi di Indonesia selama periode 2021--2024.
+Repositori ini berisi paper, data, dan kode R untuk analisis **regresi
+data panel** pada PDRB ADHK 2010 dengan variabel Pendapatan Asli Daerah
+(PAD), Tingkat Partisipasi Angkatan Kerja (TPAK), Rata-Rata Lama
+Sekolah, dan persentase panjang jalan kondisi baik di 10 provinsi
+Indonesia selama tahun 2021--2024.
 
-## Gambaran Umum
+📄 **Paper:**
+[`paper/Project Data Panel.pdf`](paper/Project%20Data%20Panel.pdf)
 
-Pertumbuhan dan aktivitas ekonomi antarprovinsi dapat berbeda karena
-kapasitas fiskal daerah, kondisi ketenagakerjaan, kualitas sumber daya
-manusia, serta infrastruktur. Proyek ini mengkaji faktor-faktor tersebut
-menggunakan data panel, yaitu gabungan data cross-section dan time
-series.
+------------------------------------------------------------------------
 
-**Cakupan data:** - Unit cross-section: 10 provinsi di Indonesia. -
-Periode pengamatan: 2021--2024. - Jumlah observasi: 40 (panel
-seimbang). - Variabel dependen: PDRB Atas Dasar Harga Konstan (ADHK)
-2010. - Variabel independen: PAD, TPAK, RLS, dan persentase panjang
-jalan dalam kondisi baik.
+## Ringkasan
 
-> **Catatan interpretasi:** variabel dependen yang digunakan dalam
-> dataset dan model adalah nilai PDRB ADHK 2010, bukan laju pertumbuhan
-> PDRB dalam bentuk persentase. Oleh karena itu, hasil estimasi dalam
-> repository ini diinterpretasikan sebagai hubungan variabel penjelas
-> dengan tingkat/nilai PDRB ADHK 2010.
+Penelitian ini menggunakan data panel dari 10 provinsi selama empat
+tahun pengamatan (2021--2024). Analisis dilakukan untuk melihat hubungan
+PAD, TPAK, Rata-Rata Lama Sekolah, dan kondisi infrastruktur jalan
+dengan PDRB ADHK 2010.
 
-## Tujuan Penelitian
+Tahapan analisis yang dilakukan:
 
-1.  Menganalisis hubungan Pendapatan Asli Daerah (PAD) dengan PDRB ADHK
-    2010.
-2.  Menganalisis hubungan Tingkat Partisipasi Angkatan Kerja (TPAK)
-    dengan PDRB ADHK 2010.
-3.  Menganalisis hubungan Rata-Rata Lama Sekolah (RLS) dengan PDRB ADHK
-    2010.
-4.  Menganalisis hubungan persentase panjang jalan dalam kondisi baik
-    dengan PDRB ADHK 2010.
-5.  Membandingkan pendekatan Common Effect Model (CEM), Fixed Effect
-    Model (FEM), dan Random Effect Model (REM) untuk menentukan model
-    data panel yang digunakan.
+1.  eksplorasi data dan statistik deskriptif,
+2.  pembentukan data panel dengan `Provinsi` sebagai cross-section dan
+    `Tahun` sebagai time series,
+3.  estimasi Common Effect Model (CEM), Fixed Effect Model (FEM), dan
+    Random Effect Model (REM),
+4.  pemilihan model menggunakan uji Chow, Lagrange Multiplier, dan
+    Hausman,
+5.  pengujian dan interpretasi hasil model.
 
-## Variabel Penelitian
+### Hasil utama
 
   -----------------------------------------------------------------------
-  Peran                   Variabel                Keterangan
-  ----------------------- ----------------------- -----------------------
-  Identitas               Provinsi                Unit cross-section
+  Tahap                               Hasil
+  ----------------------------------- -----------------------------------
+  Struktur data                       Balanced panel, 10 provinsi, 4
+                                      tahun, 40 observasi
 
-  Waktu                   Tahun                   Periode 2021--2024
+  Uji LM                              p-value = 1,874 × 10⁻⁸; mengarah
+                                      pada REM dibanding CEM
 
-  Dependen (Y)            PDRB ADHK 2010          Produk Domestik
-                                                  Regional Bruto atas
-                                                  dasar harga konstan
-                                                  2010
+  Uji Hausman                         p-value = 0,5452; REM dipilih
+                                      dibanding FEM
 
-  Independen (X1)         PAD                     Pendapatan Asli Daerah
+  Model terpilih                      Random Effect Model (REM)
 
-  Independen (X2)         TPAK                    Tingkat Partisipasi
-                                                  Angkatan Kerja
+  PAD                                 Koefisien = 56,172; p-value \<
+                                      0,001 (signifikan positif)
 
-  Independen (X3)         RLS                     Rata-Rata Lama Sekolah
+  Rata-Rata Lama Sekolah              Koefisien = 175.450; p-value =
+                                      0,0077 (signifikan positif)
 
-  Independen (X4)         Infrastruktur jalan     Persentase panjang
-                                                  jalan dalam kondisi
-                                                  baik
+  TPAK                                p-value = 0,5346 (tidak signifikan)
 
-  Variabel tambahan       Dummy Tahun             Variabel dummy tahun
-                                                  yang tersedia di
-                                                  dataset; penggunaannya
-                                                  perlu mengikuti
-                                                  spesifikasi model pada
-                                                  script
+  Infrastruktur jalan kondisi baik    p-value = 0,1843 (tidak signifikan)
   -----------------------------------------------------------------------
 
-## Metode Analisis
+PAD dan Rata-Rata Lama Sekolah memiliki hubungan positif dan signifikan
+dengan PDRB ADHK 2010 pada model REM. Sementara itu, TPAK dan persentase
+panjang jalan kondisi baik tidak signifikan pada taraf 5%.
 
-Analisis dilakukan menggunakan bahasa pemrograman **R**, dengan tahapan
-umum sebagai berikut:
+------------------------------------------------------------------------
 
-1.  Memuat dataset dan memeriksa tipe data.
-2.  Melakukan eksplorasi dan statistik deskriptif.
-3.  Menyusun data panel dengan `Provinsi` sebagai unit cross-section dan
-    `Tahun` sebagai indeks waktu.
-4.  Mengestimasi tiga model regresi data panel:
-    -   **Common Effect Model (CEM)**
-    -   **Fixed Effect Model (FEM)**
-    -   **Random Effect Model (REM)**
-5.  Melakukan pengujian pemilihan model, meliputi uji Chow, uji Lagrange
-    Multiplier (LM), dan uji Hausman sesuai ketersediaan implementasi
-    pada script.
-6.  Melakukan pemeriksaan diagnostik model dan menginterpretasikan hasil
-    estimasi.
-
-Berdasarkan hasil yang dilaporkan dalam naskah proyek, model yang
-dipilih adalah **Random Effect Model (REM)**. Pada hasil estimasi REM
-yang disajikan, PAD dan RLS memiliki koefisien positif dan signifikan
-pada taraf 5%, sedangkan TPAK dan persentase infrastruktur jalan tidak
-signifikan pada taraf tersebut. Interpretasi ini mengikuti hasil pada
-laporan dan bukan klaim hubungan sebab-akibat.
-
-## Struktur Repository
+## Struktur Repositori
 
 ``` text
-Data-Panel-Pertumbuhan-Ekonomi/
+.
 ├── paper/
 │   └── Project Data Panel.pdf
 ├── data/
@@ -113,72 +75,103 @@ Data-Panel-Pertumbuhan-Ekonomi/
 └── README.md
 ```
 
-**Keterangan folder:** - `paper/` --- laporan/naskah proyek akhir
-Ekonometrika dalam format PDF. - `data/` --- dataset yang digunakan
-dalam analisis. - `R/` --- script R untuk pengolahan data, estimasi
-model, dan analisis.
+------------------------------------------------------------------------
 
-## Sumber Data
+## Data
 
-Dataset merupakan data sekunder yang dihimpun dari beberapa sumber
-berikut sebagaimana dicantumkan dalam laporan proyek:
+Data yang digunakan merupakan data sekunder tahun 2021--2024 pada 10
+provinsi di Indonesia, yaitu DKI Jakarta, Jawa Barat, Jawa Tengah, Jawa
+Timur, Kalimantan Timur, Bali, Sumatera Utara, Sumatera Barat, Sulawesi
+Utara, dan Sulawesi Selatan.
 
--   **Badan Pusat Statistik (BPS)** --- PDRB ADHK 2010, TPAK, dan
-    Rata-Rata Lama Sekolah.
--   **Direktorat Jenderal Perimbangan Keuangan (DJPK), Kementerian
-    Keuangan** --- Pendapatan Asli Daerah.
--   **Kementerian Pekerjaan Umum (PU)** --- persentase/kemantapan jalan
-    provinsi.
+  -----------------------------------------------------------------------
+  Variabel                Keterangan              Satuan
+  ----------------------- ----------------------- -----------------------
+  PDRB ADHK 2010          Produk Domestik         Miliar rupiah
+                          Regional Bruto atas     
+                          dasar harga konstan     
+                          2010                    
 
-Tautan sumber yang dicantumkan dalam laporan: - PDRB:
-https://www.bps.go.id/ - TPAK: https://www.bps.go.id/ - Rata-Rata Lama
-Sekolah: https://www.bps.go.id/ - PAD:
-https://djpk.kemenkeu.go.id/portal/data/apbd - Infrastruktur jalan:
-https://data.pu.go.id/dataset/kemantapan-jalan-provinsi
+  Pendapatan Asli Daerah  Pendapatan Asli Daerah  Miliar rupiah
+                          (PAD)                   
 
-## Tools dan Packages
+  Tingkat Partisipasi     Tingkat Partisipasi     \%
+  Angkatan Kerja          Angkatan Kerja (TPAK)   
 
--   R
--   `plm` --- estimasi regresi data panel.
--   `dplyr` --- pengelolaan dan transformasi data.
--   `ggplot2` --- visualisasi data.
+  Rata-Rata Lama Sekolah  Rata-rata lama sekolah  Tahun
+                          penduduk                
 
-Package tambahan dapat digunakan sesuai kebutuhan yang tercantum di
-dalam script R.
+  Persentase              Persentase panjang      \%
+  Infrastruktur Panjang   jalan dalam kondisi     
+  Jalan Kondisi Baik      baik                    
+  -----------------------------------------------------------------------
+
+### Sumber data
+
+Data diperoleh dari beberapa sumber berikut:
+
+-   **Badan Pusat Statistik (BPS):** PDRB ADHK 2010, TPAK, dan Rata-Rata
+    Lama Sekolah.
+-   **Direktorat Jenderal Perimbangan Keuangan (DJPK):** Pendapatan Asli
+    Daerah.
+-   **Kementerian Pekerjaan Umum (PU):** persentase panjang jalan
+    kondisi baik.
+
+Tautan sumber: - [BPS](https://www.bps.go.id/) - [DJPK -- Data
+APBD](https://djpk.kemenkeu.go.id/portal/data/apbd) - [Satu Data PU --
+Kemantapan Jalan
+Provinsi](https://data.pu.go.id/dataset/kemantapan-jalan-provinsi)
+
+------------------------------------------------------------------------
 
 ## Cara Menjalankan
 
-1.  Clone atau unduh repository ini.
-2.  Buka project/folder repository melalui RStudio.
-3.  Pastikan R dan package yang diperlukan telah terpasang.
-4.  Buka file `R/Data Panel Pertumbuhan Ekonomi.R`.
-5.  Jalankan script sesuai urutan analisis.
-6.  Ketika diminta memilih file, arahkan ke
-    `data/Data_Pertumbuhan_Ekonomi.csv`.
+### Prasyarat
 
-Contoh instalasi package utama:
+-   [R](https://cran.r-project.org/)
+-   [RStudio](https://posit.co/download/rstudio-desktop/) (opsional)
+-   Paket R: `plm`, `dplyr`, dan `ggplot2`, serta paket lain yang
+    digunakan pada script.
 
-``` r
-install.packages(c("plm", "dplyr", "ggplot2"))
+### Langkah
+
+``` bash
+git clone https://github.com/<username>/<nama-repo>.git
+cd <nama-repo>
 ```
 
-## Tim Penyusun
+Buka file `R/Data Panel Pertumbuhan Ekonomi.R` melalui RStudio, kemudian
+jalankan script dari awal sampai akhir. Jika script meminta memilih
+file, pilih dataset `data/Data_Pertumbuhan_Ekonomi.csv`.
 
-Proyek akhir mata kuliah Ekonometrika --- Program Studi S1 Statistika,
-Fakultas Matematika dan Ilmu Pengetahuan Alam, Universitas Padjadjaran.
+------------------------------------------------------------------------
 
--   Siti Khalilah --- 140610240062
--   Pretri Seveny Yasyaf --- 140610240080
--   Stefanie Aurelia Clarissa Harisusanti --- 140610240096
+## Metode
 
-## Catatan
+-   **CEM (Common Effect Model):** mengasumsikan tidak ada perbedaan
+    intersep antarprovinsi maupun waktu.
+-   **FEM (Fixed Effect Model):** mengakomodasi perbedaan karakteristik
+    antarprovinsi melalui efek tetap.
+-   **REM (Random Effect Model):** mengakomodasi perbedaan karakteristik
+    antarprovinsi melalui efek acak.
+-   **Uji Chow:** membandingkan CEM dan FEM.
+-   **Uji Hausman:** membandingkan FEM dan REM.
+-   **Uji Lagrange Multiplier:** membandingkan CEM dan REM.
 
-README ini disusun berdasarkan struktur folder yang ditunjukkan dan isi
-laporan proyek. Pastikan nama file di repository sama dengan nama yang
-dituliskan pada bagian **Struktur Repository** dan **Cara Menjalankan**.
-Jika nama file berbeda, sesuaikan path-nya.
+Berdasarkan hasil pengujian yang dilaporkan, model yang digunakan adalah
+Random Effect Model (REM).
 
-Hasil analisis juga perlu dibaca dengan memperhatikan cakupan data yang
-terdiri dari 10 provinsi dan 4 periode waktu, sehingga generalisasi
-hasil ke seluruh provinsi atau periode lain perlu dilakukan secara
-hati-hati.
+------------------------------------------------------------------------
+
+## Penulis
+
+Siti Khalilah, Pretri Seveny Yasyaf, dan Stefanie Aurelia Clarissa
+Harisusanti.
+
+Program Studi S1 Statistika, Fakultas Matematika dan Ilmu Pengetahuan
+Alam, Universitas Padjadjaran.
+
+------------------------------------------------------------------------
+
+**Catatan:** Variabel dependen dalam model adalah nilai PDRB ADHK 2010,
+bukan laju pertumbuhan PDRB dalam bentuk persentase.
